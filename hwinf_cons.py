@@ -1,23 +1,36 @@
 import os
 import glob
-import datetime
+import lxml
 import openpyxl
 from bs4 import BeautifulSoup
-from collections import OrderedDict
 from openpyxl.styles import NamedStyle, Font, Border, Side, Alignment
 
 src_path = 'c:\Development\Audit\src\*'
 dst_path = 'c:\Development\Audit\\'
 dst_file = 'Test1.xlsx'
 
-min_actual_win10ver = 1709
-
+min_win10_build = 16299  # 1709
 sncp = {
-    'Raw': {'SheetName': 'Raw', 'CurrentRow': 1},
-    'List': {'SheetName': 'List', 'CurrentRow': 0},
-    'Consolidation': {'SheetName': 'Consolidation', 'CurrentRow': 0}
+    'Raw': {'SheetName': 'Raw', 'CurRow': 1, 'CurCol': 0},
+    'List': {'SheetName': 'List', 'CurRow': 0, 'CurCol': 0},
+    'Consolidation': {'SheetName': 'Consolidation', 'CurRow': 0, 'CurCol': 0}
 }
 sncp_lock = list(sncp.keys())
+list_col = []
+
+
+def gen_list_col():
+    l_col = []
+    for f_ch in ['', 'A', 'B']:
+        for n_ch in range(26):
+            l_col.append((f_ch + chr(65 + n_ch)))
+    return l_col
+
+
+def gen_cr(list_n):
+    cur_cr = list_col[sncp[list_n]['CurCol']] + str(sncp[list_n]['CurRow'])
+    sncp[list_n]['CurCol'] += 1
+    return cur_cr
 
 def add_style(workbook, new_style, **kwargs):
     if new_style not in workbook.named_styles:
@@ -82,15 +95,19 @@ def make_list():
     make_tab_topic(new_wb['List'], 'A3', '№ Листа', 'Topic_tab', 6)
     make_tab_topic(new_wb['List'], 'B3', 'Наименование организации', 'Topic_tab', 80)
     for key in sncp.keys():
-        sncp['List']['CurrentRow'] += 1
+        sncp['List']['CurRow'] += 1
         if key not in sncp_lock:
-            make_tab_body(new_wb['List'], 'A%s' % sncp['List']['CurrentRow'], sncp[key]['SheetName'], 'Main_center')
+            make_tab_body(new_wb['List'], 'A%s' % sncp['List']['CurRow'], sncp[key]['SheetName'], 'Main_center')
             hyperlink ='=HYPERLINK("#%s!A1", "%s")' % (sncp[key]['SheetName'], key)
-            make_tab_body(new_wb['List'], 'B%s' % sncp['List']['CurrentRow'], hyperlink, 'Main_hyperlink')
+            make_tab_body(new_wb['List'], 'B%s' % sncp['List']['CurRow'], hyperlink, 'Main_hyperlink')
 
 
 def make_raw_topic():
+
+
     make_main_topic(new_wb['Raw'], 'A1', 'Свод данных', 'Topic_main')
+
+
     make_tab_topic(new_wb['Raw'], 'A3', 'Наименование организации', 'Topic_tab', 50)
     make_tab_topic(new_wb['Raw'], 'B3', 'Рабочее место', 'Topic_tab', 20)
     make_tab_topic(new_wb['Raw'], 'C3', 'Название АРМ', 'Topic_tab', 10)
@@ -109,7 +126,7 @@ def make_raw_topic():
 
     make_tab_topic(new_wb['Raw'], 'BX3', 'Пользователь', 'Topic_tab', 15)
 
-    sncp['Raw']['CurrentRow'] = 4
+    sncp['Raw']['CurRow'] = 4
 
 
 def make_org_topic(list_n, org_name):
@@ -123,7 +140,7 @@ def make_org_topic(list_n, org_name):
     make_tab_topic(new_wb[list_n], 'G3', 'Сокет', 'Topic_tab', 8)
 
 
-    sncp[org_name]['CurrentRow'] += 1
+    sncp[org_name]['CurRow'] += 1
 
 
 
@@ -189,64 +206,89 @@ def scan_hwi_htm(src_hwi_path):
                     flag_p = False
                     f_param[current_p] = tmp_s.rstrip().lstrip()
 
+    def check_os(os_n):
+        if os:
+            if os_n[2] not in ['10']:
+                return 'Да'
+            else:
+                if 'Home' in os_n:
+                    return 'Да'
+                elif int((os_n[int(os_n.index('Build')) + 1]).split('.')[0]) < min_win10_build:
+                    return 'Да'
+                else:
+                    return 'Нет'
+
+    def check_date(date_m):
+        date_m = int(date_m.split('/')[2])
+        if int(date_m) < 100:
+            date_m += 2000
+        return date_m
+
+
+
+
+
 
 
 
     # ====================
     header_list = make_headers_list(tables)
     org_sn = sncp[org]['SheetName']
-    raw_cr = sncp['Raw']['CurrentRow']
-    org_cr = sncp[org]['CurrentRow']
+    raw_cr = sncp['Raw']['CurRow']
+    org_cr = sncp[org]['CurRow']
     # ------------------------------------------------------------------------------------
-    # entry main info
-
-    make_tab_body(new_wb['Raw'], 'A%s' % raw_cr, org, 'Main_left')
-    make_tab_body(new_wb['Raw'], 'B%s' % raw_cr, workplace, 'Main_left')
-
     scan_value(tables[3], info_base)
-    make_tab_body(new_wb['Raw'], 'C%s' % raw_cr, info_base["Computer Name:"], 'Main_left')
-    make_tab_body(new_wb['Raw'], 'D%s' % raw_cr, info_base["Operating System:"], 'Main_left')
 
-    make_tab_body(new_wb[org_sn], 'A%s' % org_cr, org_cr - 3, 'Main_left')
-    make_tab_body(new_wb[org_sn], 'B%s' % org_cr, workplace, 'Main_left')
-    make_tab_body(new_wb[org_sn], 'C%s' % org_cr, info_base["Operating System:"], 'Main_left')
-
-    os = info_base["Operating System:"].split(' ')
-    if os[2] != '10':
-        make_tab_body(new_wb[org_sn], 'D%s' % org_cr, "Да", 'Main_center')
-    else:
-        win_ver = int(os[len(os)-1][1:5])
-        if win_ver < min_actual_win10ver:
-            make_tab_body(new_wb[org_sn], 'D%s' % org_cr, "Да", 'Main_center')
-        else:
-            make_tab_body(new_wb[org_sn], 'D%s' % org_cr, "Нет", 'Main_center')
-
-
-    # -----------------------------------------------
-    # entry CPU info
     index_cpu = header_list.index('Central Processor(s)')
     scan_value(tables[index_cpu + 1], info_cpu_1)
     scan_value(tables[index_cpu + 3], info_cpu_2)
 
+    # Motherboard info
+    index_mb = header_list.index('Motherboard')
+    scan_value(tables[index_mb + 1], info_mb)
+
+
+
+
+
+
+
+    # entry Raw list
+    make_tab_body(new_wb['Raw'], 'A%s' % raw_cr, org, 'Main_left')
+    make_tab_body(new_wb['Raw'], 'B%s' % raw_cr, workplace, 'Main_left')
+    make_tab_body(new_wb['Raw'], 'C%s' % raw_cr, info_base["Computer Name:"], 'Main_left')
+    make_tab_body(new_wb['Raw'], 'D%s' % raw_cr, info_base["Operating System:"], 'Main_left')
     make_tab_body(new_wb['Raw'], 'E%s' % raw_cr, info_cpu_1["Number Of Processor Cores:"], 'Main_center')
     make_tab_body(new_wb['Raw'], 'F%s' % raw_cr, info_cpu_1["Number Of Logical Processors:"], 'Main_center')
     make_tab_body(new_wb['Raw'], 'G%s' % raw_cr, info_cpu_2["CPU Brand Name:"], 'Main_center')
     make_tab_body(new_wb['Raw'], 'H%s' % raw_cr, info_cpu_2["CPU Platform:"], 'Main_center')
     make_tab_body(new_wb['Raw'], 'I%s' % raw_cr, info_cpu_2["L3 Cache:"], 'Main_center')
+    make_tab_body(new_wb['Raw'], 'J%s' % raw_cr, info_mb["Motherboard Model:"], 'Main_left')
+    make_tab_body(new_wb['Raw'], 'K%s' % raw_cr, check_date(info_mb["BIOS Date:"]), 'Main_center')
 
+
+    # entry Org List
+    make_tab_body(new_wb[org_sn], 'A%s' % org_cr, org_cr - 3, 'Main_left')
+    make_tab_body(new_wb[org_sn], 'B%s' % org_cr, workplace, 'Main_left')
+    make_tab_body(new_wb[org_sn], 'C%s' % org_cr, info_base["Operating System:"], 'Main_left')
+    make_tab_body(new_wb[org_sn], 'D%s' % org_cr, check_os(info_base["Operating System:"].split(' ')), 'Main_center')
     make_tab_body(new_wb[org_sn], 'E%s' % org_cr, info_cpu_2["CPU Brand Name:"], 'Main_left')
     make_tab_body(new_wb[org_sn], 'F%s' % org_cr, info_cpu_1["Number Of Processor Cores:"], 'Main_left')
     make_tab_body(new_wb[org_sn], 'G%s' % org_cr, info_cpu_2["L3 Cache:"], 'Main_left')
 
-    # entry Motherboard info
-    index_mb = header_list.index('Motherboard')
-    scan_value(tables[index_mb + 1], info_mb)
-    date_m = int(info_mb["BIOS Date:"].split('/')[2])
-    if int(date_m) < 100:
-        date_m += 2000
 
-    make_tab_body(new_wb['Raw'], 'J%s' % raw_cr, info_mb["Motherboard Model:"], 'Main_left')
-    make_tab_body(new_wb['Raw'], 'K%s' % raw_cr, date_m, 'Main_center')
+
+    # -----------------------------------------------
+    # entry CPU info
+
+
+
+
+
+
+
+
+
 
 
 
@@ -255,14 +297,14 @@ def scan_hwi_htm(src_hwi_path):
 
     # entry misk info
 
-    make_tab_body(new_wb['Raw'], 'BX%s' % sncp['Raw']['CurrentRow'], info_base["Current User Name:"], 'Main_left')
+    make_tab_body(new_wb['Raw'], 'BX%s' % sncp['Raw']['CurRow'], info_base["Current User Name:"], 'Main_left')
 
 
 
 
 
-    sncp['Raw']['CurrentRow'] += 1
-    sncp[org]['CurrentRow'] += 1
+    sncp['Raw']['CurRow'] += 1
+    sncp[org]['CurRow'] += 1
 
 
 # Рейтинг тех. оснащенности
@@ -278,6 +320,8 @@ if __name__ == '__main__':
     # Create new excel file
     new_wb = openpyxl.Workbook()
     init_style()
+    list_col = gen_list_col()
+
 
 
 
@@ -286,19 +330,19 @@ if __name__ == '__main__':
     for i in range(len(org_path)):
         org_name = org_path[i].split('\\')[-1]
         if org_name not in sncp:
-            sncp[org_name] = {'SheetName': str(i + 1), 'CurrentRow': 1}
+            sncp[org_name] = {'SheetName': str(i + 1), 'CurRow': 1}
 
     for key in reversed(list(sncp.keys())):
         new_wb.create_sheet(title=sncp[key]['SheetName'], index=0)
         if key not in sncp_lock:
             make_org_topic(sncp[key]['SheetName'], key)
-            sncp[key]['CurrentRow'] += 2
+            sncp[key]['CurRow'] += 2
 
     make_list()  # Список листов с гиперссылкой
     make_raw_topic()
 
     for i in range(len(org_path)):
-        print ('----------------------------------------------------------------------------')
+        print('----------------------------------------------------------------------------')
         print(org_path[i])
         workplaces = glob.glob(org_path[i]+'\*')
         hwi_htm_files = glob.glob(org_path[i]+'\*\*.htm*')
@@ -312,9 +356,9 @@ if __name__ == '__main__':
             j += 1
             if j > 3:
                 break
-        if i>11:
+        new_wb.save(dst_path + dst_file)
+        if i > 6:
             break
-
 
 
 
