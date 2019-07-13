@@ -25,12 +25,14 @@ out_data_raw = {
         'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 16, 'value': ''},
     'Computer Name:': {
         'name': 'Название АРМ', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Case Type:': {
+        'name': 'Тип корпуса', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Status': {
         'name': 'Статус', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Operating System:': {
-        'name': 'Операционная система', 'b_style': 'Main_center', 'width': 20, 'value': ''},
-    'OS update': {
-        'name': 'Необходимость обновить ОС', 'b_style': 'Main_center', 'width': 15, 'value': ''},
+        'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''},
+    'OS need update': {
+        'name': 'Необходимо обновить ОС', 'b_style': 'Main_center', 'width': 11, 'value': ''},
     'Number Of Processor Cores:': {
         'name': 'Кол-во ядер', 'b_style': 'Main_center', 'width': 8, 'value': ''},
     'Number Of Logical Processors:': {
@@ -44,12 +46,64 @@ out_data_raw = {
     'Motherboard Model:': {
         'name': 'Модель мат.платы', 'b_style': 'Main_center', 'width': 15, 'value': ''},
     'Data': {
-        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 7, 'value': ''},
     'Total Memory Size:': {
-        'name': 'Опре. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''}
+        'name': 'Опер. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Total Memory Size [MB]:': {
+        'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Need upgrade memory': {
+        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+    'Total Memory Count': {
+        'name': 'Кол-во модулей', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+    'Module Size:0': {
+        'name': 'Модуль 1 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:0': {
+        'name': 'Модуль 1 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Speed:0': {
+        'name': 'Модуль 1 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Module Manufacturer:0': {
+        'name': 'Модуль 1 производитель', 'b_style': 'Main_left', 'width': 13, 'value': ''},
+    'Module Part Number:0': {
+        'name': 'Модуль 1 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Module Size:1': {
+        'name': 'Модуль 2 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:1': {
+        'name': 'Модуль 2 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Speed:1': {
+        'name': 'Модуль 2 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Module Manufacturer:1': {
+        'name': 'Модуль 2 производитель', 'b_style': 'Main_left', 'width': 13, 'value': ''},
+    'Module Part Number:1': {
+        'name': 'Модуль 2 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Module Size:2': {
+        'name': 'Модуль 3 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:2': {
+        'name': 'Модуль 3 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Speed:2': {
+        'name': 'Модуль 3 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Module Manufacturer:2': {
+        'name': 'Модуль 3 производитель', 'b_style': 'Main_left', 'width': 13, 'value': ''},
+    'Module Part Number:2': {
+        'name': 'Модуль 3 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Module Size:3': {
+        'name': 'Модуль 4 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:3': {
+        'name': 'Модуль 4 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Speed:3': {
+        'name': 'Модуль 4 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Module Manufacturer:3': {
+        'name': 'Модуль 4 производитель', 'b_style': 'Main_left', 'width': 13, 'value': ''},
+    'Module Part Number:3': {
+        'name': 'Модуль 4 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+
 
     # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
 }
+
 
 
 def gen_list_col():
@@ -212,31 +266,58 @@ def scan_hwi_htm(src_hwi_path):
     workplace = list_path[llp - 2]
 
     info_base = {
-        "Computer Name:": "",
-        "Operating System:": "",
-        "Current User Name:": "",
-        'Manufacturer:': "",
-        'Case Type:': ""
-
-
+        'Computer Name:': '',
+        'Current User Name:': '',
+        'Manufacturer:': '',
+        'Case Type:': ''
     }
-    info_cpu_1 = {
-        "Number Of Processor Cores:": "",
-        "Number Of Logical Processors:": ""
+    info_os = {
+        'Operating System:': '',
+        'OS Version': '',
+        'OS Category': '',
+        'OS Build': 0,
+        'OS Type': '',
+        'OS need update': 'Да',
+        'Update style': 'Main_center_red'
     }
-    info_cpu_2 = {
-        "CPU Brand Name:": "",
-        "CPU Code Name:": "",
-        "CPU Technology:": "",
-        "CPU Platform:": "",
-        "L3 Cache:": ""
+    info_date = {
+        'value': '',
+        'age': '',
+        'style': 'Main_center'
+    }
+
+    info_cpu = {
+        'Number Of Processor Cores:': '',
+        'Number Of Logical Processors:': '',
+        'CPU Brand Name:': '',
+        'CPU Code Name:': '',
+        'CPU Technology:': '',
+        'CPU Platform:': '',
+        'L3 Cache:': ''
     }
     info_mb = {
         "Motherboard Model:": "",
         "BIOS Date:": ""
     }
-
-
+    info_memory = {
+        'Total Memory Size:': '',
+        'Total Memory Size [MB]:': '',
+        'Maximum Supported Memory Clock:': '',
+        'Current Memory Clock:': '',
+        'Current Timing (tCAS-tRCD-tRP-tRAS):': '',
+        'Memory Runs At:': '',
+        'Need upgrade memory': '',
+        'Upgrade style': 'Main_center',
+        'Total Memory Count': 0
+        }
+    info_module = {
+        'Module Number:': ['', '', '', ''],
+        'Module Size:': ['', '', '', ''],
+        'Memory Type:': ['', '', '', ''],
+        'Memory Speed:': ['', '', '', ''],
+        'Module Manufacturer:': ['', '', '', ''],
+        'Module Part Number:': ['', '', '', '']
+    }
     socket_stat = {
         '0': {}
 
@@ -273,53 +354,98 @@ def scan_hwi_htm(src_hwi_path):
         date_m = int(date_m.split('/')[2])
         if int(date_m) < 100:
             date_m += 2000
+        info_date['value'] = date_m
         if date_m <= 2010:
-            return {'value': date_m, 'age': 'old', 'color': 'Main_center_red'}
+            info_date['age'] = 'old'
+            info_date['style'] = 'Main_center_red'
         elif date_m >= 2011 and date_m <= 2013:
-            return {'value': date_m, 'age': 'middle', 'color': 'Main_center_yellow'}
+            info_date['age'] = 'middle'
+            info_date['style'] = 'Main_center_yellow'
         else:
-            return {'value': date_m, 'age': 'new', 'color': 'Main_center_green'}
+            info_date['age'] = 'new'
+            info_date['style'] = 'Main_center_green'
 
     def check_os(os_n):
-        if os_n:
-            if os_n[2] not in ['10']:
-                return 'Да', 'Main_center_red'
-            else:
-                if 'Home' in os_n:
-                    return 'Да', 'Main_center_red'
-                elif int((os_n[int(os_n.index('Build')) + 1]).split('.')[0]) < min_win10_build:
-                    return 'Да', 'Main_center_red'
-                else:
-                    return 'Нет', 'Main_center_green'
-        return 'проверка', 'Main_center_yellow'
+        if 'Microsoft' in os_n:
+            build = os_n[os_n.index('Build') + 1].split('.')[0]
+            if build:
+                info_os['OS Build'] = int(build)
+            if '(x64)' in os_n:
+                info_os['OS Type'] = 'x64'
+            if os_n[2] in ['10', '8.1', '8', '7', 'Vista', 'XP', '2000']:
+                info_os['OS Version'] = os_n[2]
+            elif os_n[2] == 'Server':
+                info_os['OS Version'] = os_n[2] + ' ' + os_n[3]
+
+            if info_os['OS Version'] == '10' and info_os['OS Build'] >= min_win10_build:
+                info_os['OS need update'] = 'Нет'
+                info_os['Update style'] = 'Main_center_green'
+
+    def check_memory():
+        info_memory['Total Memory Size [MB]:'] = int(info_memory['Total Memory Size [MB]:'])
+        if info_memory['Total Memory Size [MB]:'] < 4096:
+            info_memory['Need upgrade memory'] = 'Да'
+            info_memory['Upgrade style'] = 'Main_center_red'
+        else:
+            info_memory['Need upgrade memory'] = 'Нет'
+
+    def check_module():
+        index_module = []
+        module_tmp = {
+            'Module Number:': '',
+            'Module Size:': '',
+            'Memory Type:': '',
+            'Memory Speed:': '',
+            'Module Manufacturer:': '',
+            'Module Part Number:': ''
+            }
+
+        for t in range(header_list.index('Memory'), len_tables-50):
+            if header_list[t].startswith('Row:'):
+                index_module.append(t)
+            if len(index_module) == 0:
+                index_module.append(header_list.index('Memory'))
+        for im in range(len(index_module)):
+
+            scan_value(tables[index_module[im] + 1], module_tmp)
+            for mkey in info_module.keys():
+                print(  module_tmp[mkey])
+                info_module[mkey][im] = module_tmp[mkey]
+                module_tmp[mkey] = ''
+        info_memory['Total Memory Count'] = len(index_module)
+
 
 
 
     # ====================
     header_list = make_headers_list(tables)
-
+    print(workplace)
     # ------------------------------------------------------------------------------------
     # Base info
     scan_value(tables[3], info_base)
-    oper_sys = (check_os(info_base["Operating System:"].split(' ')))
-
+    scan_value(tables[3], info_os)
     index_base = header_list.index('System Enclosure')
     scan_value(tables[index_base + 1], info_base)
-    print(info_base['Case Type:'])
 
-
-
+    # Operating System info
+    check_os(info_os["Operating System:"].split(' '))
 
     # CPU info
     index_cpu = header_list.index('Central Processor(s)')
-    scan_value(tables[index_cpu + 1], info_cpu_1)
-    scan_value(tables[index_cpu + 3], info_cpu_2)
+    scan_value(tables[index_cpu + 1], info_cpu)
+    scan_value(tables[index_cpu + 3], info_cpu)
 
     # Motherboard info
     index_mb = header_list.index('Motherboard')
     scan_value(tables[index_mb + 1], info_mb)
-    info_date = check_date(info_mb["BIOS Date:"])
+    check_date(info_mb["BIOS Date:"])
 
+    # Scan Memory Device
+    index_memory = header_list.index('Memory')
+    scan_value(tables[index_memory + 1], info_memory)
+    check_memory()
+    info_memory['Total Memory Count'] = header_list.count('Memory Device')
+    check_module()
 
 
 
@@ -331,26 +457,52 @@ def scan_hwi_htm(src_hwi_path):
 
 
     # entry Raw list
-
     out_data_raw['Organithation']['value'] = org
     out_data_raw['Workplace']['value'] = workplace
-    out_data_raw['Computer Name:']['value'] = info_base["Computer Name:"]
+    out_data_raw['Computer Name:']['value'] = info_base['Computer Name:']
+    out_data_raw['Case Type:']['value'] = info_base['Case Type:']
     #out_data_raw['Status']['value'] = status[0]
 
-    out_data_raw['Operating System:']['value'] = info_base["Operating System:"]
-    out_data_raw['OS update']['value'] = oper_sys[0]
-    out_data_raw['OS update']['b_style'] = oper_sys[1]
+    out_data_raw['Operating System:']['value'] = info_os['Operating System:']
+    out_data_raw['OS need update']['value'] = info_os['OS need update']
+    out_data_raw['OS need update']['b_style'] = info_os['Update style']
 
-    out_data_raw['Number Of Processor Cores:']['value'] = info_cpu_1["Number Of Processor Cores:"]
-    out_data_raw['Number Of Logical Processors:']['value'] = info_cpu_1["Number Of Logical Processors:"]
-    out_data_raw['CPU Brand Name:']['value'] = info_cpu_2["CPU Brand Name:"]
-    out_data_raw['CPU Platform:']['value'] = info_cpu_2["CPU Platform:"]
-    out_data_raw['L3 Cache:']['value'] = info_cpu_2["L3 Cache:"]
+    out_data_raw['Number Of Processor Cores:']['value'] = info_cpu['Number Of Processor Cores:']
+    out_data_raw['Number Of Logical Processors:']['value'] = info_cpu['Number Of Logical Processors:']
+    out_data_raw['CPU Brand Name:']['value'] = info_cpu['CPU Brand Name:']
+    out_data_raw['CPU Platform:']['value'] = info_cpu['CPU Platform:']
+    out_data_raw['L3 Cache:']['value'] = info_cpu['L3 Cache:']
 
-    out_data_raw['Motherboard Model:']['value'] = info_mb["Motherboard Model:"]
+    out_data_raw['Motherboard Model:']['value'] = info_mb['Motherboard Model:']
     out_data_raw['Data']['value'] = info_date['value']
-    out_data_raw['Data']['b_style'] = info_date['color']
+    out_data_raw['Data']['b_style'] = info_date['style']
+
+    out_data_raw['Total Memory Size:']['value'] = info_memory['Total Memory Size:']
+    out_data_raw['Need upgrade memory']['value'] = info_memory['Need upgrade memory']
+    out_data_raw['Need upgrade memory']['b_style'] = info_memory['Upgrade style']
+
+    out_data_raw['Total Memory Size [MB]:']['value'] = info_memory['Total Memory Size [MB]:']
+    out_data_raw['Total Memory Count']['value'] = info_memory['Total Memory Count']
+
+
+
+
+
+    for i in range(info_memory['Total Memory Count']):
+        print('----', i, info_module['Module Size:'][i])
+        out_data_raw['Module Size:%i' % i]['value'] = info_module['Module Size:'][i]
+        out_data_raw['Memory Type:%s' % i]['value'] = info_module['Memory Type:'][i]
+        out_data_raw['Memory Speed:%s' % i]['value'] = info_module['Memory Speed:'][i]
+        out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
+        out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
+
+
+
+
+
+
     #out_data_raw['']['value'] = ''
+    #print(round(1.5))
 
 
 
@@ -362,15 +514,15 @@ def scan_hwi_htm(src_hwi_path):
 
 
     # entry Org List
-    org_sn = sncp[org]['SheetName']
-    sncp[org]['CurCol'] = 0
-    make_tab_body(new_wb[org_sn], gen_cr(org), 1, 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), workplace, 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_base["Operating System:"], 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), oper_sys[0], 'Main_center')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Brand Name:"], 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_1["Number Of Processor Cores:"], 'Main_center')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Platform:"], 'Main_center')
+    #org_sn = sncp[org]['SheetName']
+    #sncp[org]['CurCol'] = 0
+    #make_tab_body(new_wb[org_sn], gen_cr(org), 1, 'Main_left')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), workplace, 'Main_left')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), info_base["Operating System:"], 'Main_left')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), oper_sys[0], 'Main_center')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Brand Name:"], 'Main_left')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_1["Number Of Processor Cores:"], 'Main_center')
+    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Platform:"], 'Main_center')
 
     #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["L3 Cache:"], 'Main_left')
 
@@ -435,10 +587,10 @@ if __name__ == '__main__':
 
             scan_hwi_htm(src_tmp_path)
             j += 1
-            if j > 3:
+            if j > 7:
                 break
         new_wb.save(dst_path + dst_file)
-        if i > 6:
+        if i > 5:
             break
 
 
