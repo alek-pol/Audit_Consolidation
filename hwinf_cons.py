@@ -18,6 +18,39 @@ sncp = {
 sncp_lock = list(sncp.keys())
 list_col = []
 
+out_data_raw = {
+    'Organithation': {
+        'name': 'Наименование организации', 'b_style': 'Main_left', 'width': 30, 'value': ''},
+    'Workplace': {
+        'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 16, 'value': ''},
+    'Computer Name:': {
+        'name': 'Название АРМ', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Status': {
+        'name': 'Статус', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Operating System:': {
+        'name': 'Операционная система', 'b_style': 'Main_center', 'width': 20, 'value': ''},
+    'OS update': {
+        'name': 'Необходимость обновить ОС', 'b_style': 'Main_center', 'width': 15, 'value': ''},
+    'Number Of Processor Cores:': {
+        'name': 'Кол-во ядер', 'b_style': 'Main_center', 'width': 8, 'value': ''},
+    'Number Of Logical Processors:': {
+        'name': 'Кол-во логич-х проц-в', 'b_style': 'Main_center', 'width': 9, 'value': ''},
+    'CPU Brand Name:': {
+        'name': 'Процессор', 'b_style': 'Main_center', 'width': 20, 'value': ''},
+    'CPU Platform:': {
+        'name': 'Сокет', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'L3 Cache:': {
+        'name': 'L3 - Кэш', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Motherboard Model:': {
+        'name': 'Модель мат.платы', 'b_style': 'Main_center', 'width': 15, 'value': ''},
+    'Data': {
+        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Total Memory Size:': {
+        'name': 'Опре. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''}
+
+    # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
+}
+
 
 def gen_list_col():
     l_col = []
@@ -129,30 +162,25 @@ def make_list():
 
 def make_raw_topic():
     make_main_topic(new_wb['Raw'], 'A1', 'Общий свод данных', 'Topic_main')
-
     sncp['Raw']['CurRow'] = 3
     sncp['Raw']['CurCol'] = 0
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Наименование организации', 'Topic_tab', 30)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Рабочее место', 'Topic_tab', 16)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Название АРМ', 'Topic_tab', 10)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Статус', 'Topic_tab', 10)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Операционная система', 'Topic_tab', 20)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Необходимость обновить ОС', 'Topic_tab', 15)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Кол-во ядер', 'Topic_tab', 8)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Кол-во логич-х проц-в', 'Topic_tab', 9)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Процессор', 'Topic_tab', 20)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Сокет', 'Topic_tab', 10)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'L3 - Кэш', 'Topic_tab', 10)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Модель мат.платы', 'Topic_tab', 15)
-    make_tab_topic(new_wb['Raw'], gen_cr('Raw'), 'Год произв-ва', 'Topic_tab', 10)
+    for k, v in out_data_raw.items():
+        make_tab_topic(new_wb['Raw'], gen_cr('Raw'), v['name'], 'Topic_tab', v['width'])
+    sncp['Raw']['CurRow'] += 1
 
-    #make_tab_topic(new_wb['Raw'], 'BX3', 'Пользователь', 'Topic_tab', 15)
-    sncp['Raw']['CurRow'] = 4
+
+def out_raw_body():
+    sncp['Raw']['CurCol'] = 0
+    if out_data_raw['Organithation']['value'] != '':
+        for k, v in out_data_raw.items():
+            make_tab_body(new_wb['Raw'], gen_cr('Raw'), v['value'], v['b_style'])
+            v['value'] = ''
+
+        sncp['Raw']['CurRow'] += 1
 
 
 def make_org_topic(list_n, org_name):
     make_main_topic(new_wb[list_n], 'A1', org_name, 'Topic_main')
-
     sncp[org_name]['CurRow'] = 3
     sncp[org_name]['CurCol'] = 0
     make_tab_topic(new_wb[list_n], gen_cr(org_name), '№', 'Topic_tab', 5)
@@ -186,7 +214,11 @@ def scan_hwi_htm(src_hwi_path):
     info_base = {
         "Computer Name:": "",
         "Operating System:": "",
-        "Current User Name:": ""
+        "Current User Name:": "",
+        'Manufacturer:': "",
+        'Case Type:': ""
+
+
     }
     info_cpu_1 = {
         "Number Of Processor Cores:": "",
@@ -199,7 +231,6 @@ def scan_hwi_htm(src_hwi_path):
         "CPU Platform:": "",
         "L3 Cache:": ""
     }
-
     info_mb = {
         "Motherboard Model:": "",
         "BIOS Date:": ""
@@ -238,24 +269,16 @@ def scan_hwi_htm(src_hwi_path):
                     flag_p = False
                     f_param[current_p] = tmp_s.rstrip().lstrip()
 
-
-
-
     def check_date(date_m):
         date_m = int(date_m.split('/')[2])
         if int(date_m) < 100:
             date_m += 2000
         if date_m <= 2010:
-            return date_m, 0, 'Main_center_red'
+            return {'value': date_m, 'age': 'old', 'color': 'Main_center_red'}
         elif date_m >= 2011 and date_m <= 2013:
-            return date_m, 1, 'Main_center_yellow'
+            return {'value': date_m, 'age': 'middle', 'color': 'Main_center_yellow'}
         else:
-            return date_m, 2, 'Main_center_green'
-
-
-
-
-
+            return {'value': date_m, 'age': 'new', 'color': 'Main_center_green'}
 
     def check_os(os_n):
         if os_n:
@@ -276,9 +299,18 @@ def scan_hwi_htm(src_hwi_path):
     header_list = make_headers_list(tables)
 
     # ------------------------------------------------------------------------------------
+    # Base info
     scan_value(tables[3], info_base)
     oper_sys = (check_os(info_base["Operating System:"].split(' ')))
 
+    index_base = header_list.index('System Enclosure')
+    scan_value(tables[index_base + 1], info_base)
+    print(info_base['Case Type:'])
+
+
+
+
+    # CPU info
     index_cpu = header_list.index('Central Processor(s)')
     scan_value(tables[index_cpu + 1], info_cpu_1)
     scan_value(tables[index_cpu + 3], info_cpu_2)
@@ -286,32 +318,47 @@ def scan_hwi_htm(src_hwi_path):
     # Motherboard info
     index_mb = header_list.index('Motherboard')
     scan_value(tables[index_mb + 1], info_mb)
-    date_status = check_date(info_mb["BIOS Date:"])
+    info_date = check_date(info_mb["BIOS Date:"])
 
 
 
-    if date_status == 1:
-        status = ['на списание', '']
-    else:
-        status = ['', '']
+
+    #if date_status == 1:
+     #   status = ['на списание', '']
+    #else:
+     #   status = ['', '']
 
 
 
     # entry Raw list
-    sncp['Raw']['CurCol'] = 0
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), org, 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), workplace, 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_base["Computer Name:"], 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), status[0], 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_base["Operating System:"], 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), oper_sys[0], oper_sys[1])
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_cpu_1["Number Of Processor Cores:"], 'Main_center')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_cpu_1["Number Of Logical Processors:"], 'Main_center')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_cpu_2["CPU Brand Name:"], 'Main_center')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_cpu_2["CPU Platform:"], 'Main_center')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_cpu_2["L3 Cache:"], 'Main_center')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), info_mb["Motherboard Model:"], 'Main_left')
-    make_tab_body(new_wb['Raw'], gen_cr('Raw'), date_status[0], date_status[2])
+
+    out_data_raw['Organithation']['value'] = org
+    out_data_raw['Workplace']['value'] = workplace
+    out_data_raw['Computer Name:']['value'] = info_base["Computer Name:"]
+    #out_data_raw['Status']['value'] = status[0]
+
+    out_data_raw['Operating System:']['value'] = info_base["Operating System:"]
+    out_data_raw['OS update']['value'] = oper_sys[0]
+    out_data_raw['OS update']['b_style'] = oper_sys[1]
+
+    out_data_raw['Number Of Processor Cores:']['value'] = info_cpu_1["Number Of Processor Cores:"]
+    out_data_raw['Number Of Logical Processors:']['value'] = info_cpu_1["Number Of Logical Processors:"]
+    out_data_raw['CPU Brand Name:']['value'] = info_cpu_2["CPU Brand Name:"]
+    out_data_raw['CPU Platform:']['value'] = info_cpu_2["CPU Platform:"]
+    out_data_raw['L3 Cache:']['value'] = info_cpu_2["L3 Cache:"]
+
+    out_data_raw['Motherboard Model:']['value'] = info_mb["Motherboard Model:"]
+    out_data_raw['Data']['value'] = info_date['value']
+    out_data_raw['Data']['b_style'] = info_date['color']
+    #out_data_raw['']['value'] = ''
+
+
+
+
+    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , 'Main_left')
+    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , )
+    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , 'Main_left')
+
 
 
     # entry Org List
@@ -322,8 +369,10 @@ def scan_hwi_htm(src_hwi_path):
     make_tab_body(new_wb[org_sn], gen_cr(org), info_base["Operating System:"], 'Main_left')
     make_tab_body(new_wb[org_sn], gen_cr(org), oper_sys[0], 'Main_center')
     make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Brand Name:"], 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_1["Number Of Processor Cores:"], 'Main_left')
-    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["L3 Cache:"], 'Main_left')
+    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_1["Number Of Processor Cores:"], 'Main_center')
+    make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Platform:"], 'Main_center')
+
+    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["L3 Cache:"], 'Main_left')
 
 
 
@@ -334,7 +383,8 @@ def scan_hwi_htm(src_hwi_path):
 
     # entry misk info
     #make_tab_body(new_wb['Raw'], 'BX%s' % sncp['Raw']['CurRow'], info_base["Current User Name:"], 'Main_left')
-    sncp['Raw']['CurRow'] += 1
+
+    #sncp['Raw']['CurRow'] += 1
     sncp[org]['CurRow'] += 1
 
 
@@ -365,7 +415,7 @@ if __name__ == '__main__':
         new_wb.create_sheet(title=sncp[key]['SheetName'], index=0)
         if key not in sncp_lock:
             make_org_topic(sncp[key]['SheetName'], key)
-            #sncp[key]['CurRow'] += 2
+
 
     make_list()  # Список листов с гиперссылкой
     make_raw_topic()
@@ -380,6 +430,8 @@ if __name__ == '__main__':
         j = 0
         for src_tmp_path in hwi_htm_files:
             #print(src_tmp_path)
+
+            out_raw_body()
 
             scan_hwi_htm(src_tmp_path)
             j += 1
