@@ -1,6 +1,7 @@
 import os
 import glob
 import lxml
+import math
 import openpyxl
 from bs4 import BeautifulSoup
 from openpyxl.styles import NamedStyle, Font, Border, Side, Alignment, PatternFill
@@ -145,11 +146,30 @@ out_data_raw = {
     'Nominal Form Factor:2': {
         'name': 'Привод 3 Form Factor', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Cache Buffer Size:2': {
-        'name': 'Привод 3 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+        'name': 'Привод 3 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Diagonal': {
+        'name': 'Диагональ', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Monitor Name:': {
+            'name': 'Модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Monitor Name (Manuf):': {
+            'name': 'Модельный ряд', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Serial Number:': {
+            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Date Of Manufacture:': {
+            'name': '', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Max. Vertical Size:': {
+            'name': 'Высота', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Max. Horizontal Size:': {
+            'name': 'Ширина', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+
 
 
     # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
 }
+
+
+
 mem_cost = {
     '200.0 MHz (PC3200)': {1: 1000},
     '266.7 MHz (PC2-4200)': {2: 2050},
@@ -385,7 +405,8 @@ def scan_hwi_htm(src_hwi_path):
         'Serial Number:': '',
         'Date Of Manufacture:': '',
         'Max. Vertical Size:': '',
-        'Max. Horizontal Size:': ''
+        'Max. Horizontal Size:': '',
+        'Diagonal': ''
     }
 
 
@@ -482,26 +503,27 @@ def scan_hwi_htm(src_hwi_path):
         for t in range(header_list.index('Memory'), len_tables-50):
             if header_list[t].startswith('Row:'):
                 index_module.append(t)
-
         if len(index_module) != 0:
             for im in range(len(index_module)):
                 scan_value(tables[index_module[im] + 1], module_tmp)
-                if module_tmp['Module Density:'] == '':
-                    ms = module_tmp['Module Size:'].split(' ')
-                    if ms[1] == 'GBytes':
-                        module_tmp['Module Density:'] = int(ms[0]) * 1024
+                if module_tmp['Module Size:'] != '':
+                    if module_tmp['Module Density:'] == '':
+                        ms = module_tmp['Module Size:'].split(' ')
+                        if ms[1] == 'GBytes':
+                            module_tmp['Module Density:'] = int(ms[0]) * 1024
+                        else:
+                            module_tmp['Module Density:'] = int(ms[0])
                     else:
-                        module_tmp['Module Density:'] = int(ms[0])
+                        module_tmp['Module Density:'] = module_tmp['Module Density:'].split(' ')[0]
+                    for mkey in info_module.keys():
+                        info_module[mkey][im] = module_tmp[mkey]
+                        module_tmp[mkey] = ''
+                    wr_type('Memory Type:', module_tmp['Memory Type:'])
+                    wr_type('Module Type:', module_tmp['Module Type:'])
                 else:
-                    module_tmp['Module Density:'] = module_tmp['Module Density:'].split(' ')[0]
-                for mkey in info_module.keys():
-                    info_module[mkey][im] = module_tmp[mkey]
-                    module_tmp[mkey] = ''
-                wr_type('Memory Type:', module_tmp['Memory Type:'])
-                wr_type('Module Type:', module_tmp['Module Type:'])
+                    info_memory['Total Memory Count'] -= 1
             info_memory['Total Memory Count'] = len(index_module)
         else:
-            print('--- ind 0 ------------------')
             s_start = header_list.index('Memory Devices')
             for t in range(s_start + 1, s_start + 15):
                 if header_list[t] == 'Memory Device':
@@ -559,7 +581,19 @@ def scan_hwi_htm(src_hwi_path):
             drives_tmp = {}
         return i_ssd, i_drive
 
+    def check_monitor():
+        scan_value(tables[header_list.index('Monitor') + 3], info_monitor)
+        try:
+            v = int(" ".join(filter(lambda s: s.isnumeric(), info_monitor["Max. Vertical Size:"].split())))
+            h = int(" ".join(filter(lambda s: s.isnumeric(), info_monitor["Max. Horizontal Size:"].split())))
+            info_monitor['Diagonal'] = round((math.sqrt(v * v + h * h)) / 2.54)
+        except:
+            info_monitor['Diagonal'] = ""
 
+        if info_monitor['Date Of Manufacture:'] != '':
+            date = info_monitor['Date Of Manufacture:'].split(' ')
+            year = date[len(date)-1]
+            info_monitor['Date Of Manufacture:'] = year
 
 
 
@@ -573,8 +607,11 @@ def scan_hwi_htm(src_hwi_path):
     # Base info
     scan_value(tables[3], info_base)
     scan_value(tables[3], info_os)
-    index_base = header_list.index('System Enclosure')
-    scan_value(tables[index_base + 1], info_base)
+    try:
+        index_base = header_list.index('System Enclosure')
+        scan_value(tables[index_base + 1], info_base)
+    except:
+        print()
 
     # Operating System info
     check_os(info_os["Operating System:"].split(' '))
@@ -597,6 +634,10 @@ def scan_hwi_htm(src_hwi_path):
 
     # Drive info
     info_ssd, drives_count = check_drive()
+
+    # Monitor info
+    check_monitor()
+    #
 
 
 
@@ -650,6 +691,8 @@ def scan_hwi_htm(src_hwi_path):
 
     out_data_raw['Installed SSD']['value'] = info_ssd
     for i in range(drives_count):
+        if i == 3:
+            break
         out_data_raw['Drive Model:%i' % i]['value'] = info_drives['Drive Model:'][i]
         out_data_raw['Drive Controller:%i' % i]['value'] = info_drives['Drive Controller:'][i]
         out_data_raw['Drive Capacity [MB]:%i' % i]['value'] = info_drives['Drive Capacity [MB]:'][i]
@@ -657,7 +700,13 @@ def scan_hwi_htm(src_hwi_path):
         out_data_raw['Nominal Form Factor:%i' % i]['value'] = info_drives['Nominal Form Factor:'][i]
         out_data_raw['Cache Buffer Size:%i' % i]['value'] = info_drives['Cache Buffer Size:'][i]
 
-
+    out_data_raw['Monitor Name:']['value'] = info_monitor['Monitor Name:']
+    out_data_raw['Monitor Name (Manuf):']['value'] = info_monitor['Monitor Name (Manuf):']
+    out_data_raw['Serial Number:']['value'] = info_monitor['Serial Number:']
+    out_data_raw['Date Of Manufacture:']['value'] = info_monitor['Date Of Manufacture:']
+    out_data_raw['Max. Vertical Size:']['value'] = info_monitor['Max. Vertical Size:']
+    out_data_raw['Max. Horizontal Size:']['value'] = info_monitor['Max. Horizontal Size:']
+    out_data_raw['Diagonal']['value'] = info_monitor['Diagonal']
 
 
 
@@ -741,11 +790,11 @@ if __name__ == '__main__':
 
             scan_hwi_htm(src_tmp_path)
             j += 1
-            if j > 7:
-                break
+     #       if j > 7:
+     #           break
         new_wb.save(dst_path + dst_file)
-        if i > 5:
-            break
+#       if i > 5:
+    #        break
 
 
 
