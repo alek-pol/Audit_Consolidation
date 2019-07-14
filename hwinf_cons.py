@@ -149,23 +149,77 @@ out_data_raw = {
         'name': 'Привод 3 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
     'Diagonal': {
-        'name': 'Диагональ', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+        'name': 'Диагональ монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Monitor Name:': {
             'name': 'Модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Monitor Name (Manuf):': {
             'name': 'Модельный ряд', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Serial Number:': {
-            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Серийный номер', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Date Of Manufacture:': {
-            'name': '', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Max. Vertical Size:': {
             'name': 'Высота', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Max. Horizontal Size:': {
             'name': 'Ширина', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+}
 
 
+out_data_org = {
+    'Workplace': {
+        'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 15, 'value': ''},
+    'Status': {
+        'name': 'Статус', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'CPU Brand Name:': {
+        'name': 'Процессор', 'b_style': 'Main_center', 'width': 15, 'value': ''},
+    'Number Of Processor Cores:': {
+        'name': 'Кол-во ядер', 'b_style': 'Main_center', 'width': 5, 'value': ''},
 
-    # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
+
+    'CPU Platform:': {
+        'name': 'Сокет', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'L3 Cache:': {
+        'name': 'L3 - Кэш', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+    'Data': {
+        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 7, 'value': ''},
+    'Total Memory Size [MB]:': {
+        'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory upgrade': {
+        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:': {
+        'name': 'Тип памяти', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+
+    'Module Type:': {
+        'name': 'Вид модуля', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+
+    'Installed SSD': {
+        'name': 'Установлен SSD', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Drive Capacity [MB]:0': {
+        'name': 'Привод 1 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Capacity [MB]:1': {
+        'name': 'Привод 2 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+
+    'Diagonal': {
+        'name': 'Диагональ монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Monitor Name:': {
+            'name': 'Модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Date Of Manufacture:': {
+            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Case Type:': {
+        'name': 'Тип корпуса', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+
+    'Operating System:': {
+        'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''},
+    'OS need update': {
+        'name': 'Необходимо обновить ОС', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+
+
 }
 
 
@@ -308,17 +362,20 @@ def out_raw_body():
         sncp['Raw']['CurRow'] += 1
 
 
+def out_org_body(list_n, org_name):
+    sncp[org_name]['CurCol'] = 0
+    for k, v in out_data_org.items():
+        make_tab_body(new_wb[list_n], gen_cr(org_name), v['value'], v['b_style'])
+        v['value'] = ''
+    sncp[org_name]['CurRow'] += 1
+
 def make_org_topic(list_n, org_name):
+
     make_main_topic(new_wb[list_n], 'A1', org_name, 'Topic_main')
     sncp[org_name]['CurRow'] = 3
     sncp[org_name]['CurCol'] = 0
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), '№', 'Topic_tab', 5)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Рабочее место', 'Topic_tab', 16)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Операционная система', 'Topic_tab', 20)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Необходимо обновление ОС', 'Topic_tab', 13)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Процессор', 'Topic_tab', 15)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Кол-во ядер', 'Topic_tab', 8)
-    make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Сокет', 'Topic_tab', 8)
+    for k, v in out_data_org.items():
+        make_tab_topic(new_wb[list_n], gen_cr(org_name), v['name'], 'Topic_tab', v['width'])
     sncp[org_name]['CurRow'] = 4
 
 
@@ -643,7 +700,7 @@ def scan_hwi_htm(src_hwi_path):
 
 
     #if date_status == 1:
-     #   status = ['на списание', '']
+    status_t = ['На списание', 'Минимальные', 'Средние', 'Высокие']
     #else:
      #   status = ['', '']
 
@@ -708,41 +765,30 @@ def scan_hwi_htm(src_hwi_path):
     out_data_raw['Max. Horizontal Size:']['value'] = info_monitor['Max. Horizontal Size:']
     out_data_raw['Diagonal']['value'] = info_monitor['Diagonal']
 
+    out_raw_body()
+    # entry Org list
+    out_data_org['Workplace']['value'] = workplace
+    out_data_org['Status']['value'] = ''
+    out_data_org['Number Of Processor Cores:']['value'] = info_cpu['Number Of Processor Cores:']
+    out_data_org['CPU Brand Name:']['value'] = info_cpu['CPU Brand Name:']
+    out_data_org['CPU Platform:']['value'] = info_cpu['CPU Platform:']
+    out_data_org['Data']['value'] = info_date['value']
+    out_data_org['Total Memory Size [MB]:']['value'] = info_memory['Total Memory Size [MB]:']
+    out_data_org['Memory upgrade']['value'] = info_memory['Memory upgrade']
 
+    out_data_org['Memory Type:']['value'] = info_memory['Memory Type:']
+    out_data_org['Module Type:']['value'] =  info_memory['Module Type:']
+    out_data_org['Installed SSD']['value'] = info_ssd
+    out_data_org['Drive Capacity [MB]:0']['value'] = info_drives['Drive Capacity [MB]:'][0]
+    out_data_org['Drive Capacity [MB]:1']['value'] = info_drives['Drive Capacity [MB]:'][1]
+    out_data_org['Diagonal']['value'] = info_monitor['Diagonal']
+    out_data_org['Monitor Name:']['value'] = info_monitor['Monitor Name:']
+    out_data_org['Date Of Manufacture:']['value'] = info_monitor['Date Of Manufacture:']
+    out_data_org['Operating System:']['value'] = info_os['Operating System:']
+    out_data_org['OS need update']['value'] = info_os['OS need update']
+    out_data_org['Case Type:']['value'] = info_base['Case Type:']
 
-    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , 'Main_left')
-    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , )
-    #make_tab_body(new_wb['Raw'], gen_cr('Raw'), , 'Main_left')
-
-
-
-    # entry Org List
-    #org_sn = sncp[org]['SheetName']
-    #sncp[org]['CurCol'] = 0
-    #make_tab_body(new_wb[org_sn], gen_cr(org), 1, 'Main_left')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), workplace, 'Main_left')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), info_base["Operating System:"], 'Main_left')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), oper_sys[0], 'Main_center')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Brand Name:"], 'Main_left')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_1["Number Of Processor Cores:"], 'Main_center')
-    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["CPU Platform:"], 'Main_center')
-
-    #make_tab_body(new_wb[org_sn], gen_cr(org), info_cpu_2["L3 Cache:"], 'Main_left')
-
-
-
-
-
-
-
-
-    # entry misk info
-    #make_tab_body(new_wb['Raw'], 'BX%s' % sncp['Raw']['CurRow'], info_base["Current User Name:"], 'Main_left')
-
-    #sncp['Raw']['CurRow'] += 1
-    sncp[org]['CurRow'] += 1
-
-
+    out_org_body(sncp[org]['SheetName'], org)
 
 
 
@@ -771,7 +817,7 @@ if __name__ == '__main__':
         if key not in sncp_lock:
             make_org_topic(sncp[key]['SheetName'], key)
 
-
+    #print(sncp)
     make_list()  # Список листов с гиперссылкой
     make_raw_topic()
 
@@ -780,21 +826,19 @@ if __name__ == '__main__':
         print(org_path[i])
         workplaces = glob.glob(org_path[i]+'\*')
         hwi_htm_files = glob.glob(org_path[i]+'\*\*.htm*')
-        print(len(workplaces), len(hwi_htm_files))
+
         org_name = org_path[i].split('\\')[-1]
         j = 0
         for src_tmp_path in hwi_htm_files:
-            #print(src_tmp_path)
 
-            out_raw_body()
-
+            print(org_name)
             scan_hwi_htm(src_tmp_path)
             j += 1
-     #       if j > 7:
-     #           break
+            if j > 7:
+                break
         new_wb.save(dst_path + dst_file)
-#       if i > 5:
-    #        break
+        if i > 5:
+            break
 
 
 
