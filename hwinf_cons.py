@@ -51,15 +51,19 @@ out_data_raw = {
         'name': 'Опер. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Total Memory Size [MB]:': {
         'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Maximum Supported Memory Clock:': {
+        'name': 'Максимально поддерживаемая скороость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Maximum Memory Size per Channel:': {
+        'name': 'Максимум памяти на канал', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
     'Need upgrade memory': {
         'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
     'Total Memory Count': {
         'name': 'Кол-во модулей', 'b_style': 'Main_center', 'width': 10, 'value': ''},
 
+
     'Module Size:0': {
         'name': 'Модуль 1 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory Type:0': {
-        'name': 'Модуль 1 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:0': {
         'name': 'Модуль 1 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Module Manufacturer:0': {
@@ -69,8 +73,6 @@ out_data_raw = {
 
     'Module Size:1': {
         'name': 'Модуль 2 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory Type:1': {
-        'name': 'Модуль 2 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:1': {
         'name': 'Модуль 2 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Module Manufacturer:1': {
@@ -80,8 +82,6 @@ out_data_raw = {
 
     'Module Size:2': {
         'name': 'Модуль 3 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory Type:2': {
-        'name': 'Модуль 3 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:2': {
         'name': 'Модуль 3 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Module Manufacturer:2': {
@@ -91,8 +91,6 @@ out_data_raw = {
 
     'Module Size:3': {
         'name': 'Модуль 4 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory Type:3': {
-        'name': 'Модуль 4 тип', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:3': {
         'name': 'Модуль 4 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Module Manufacturer:3': {
@@ -103,7 +101,6 @@ out_data_raw = {
 
     # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
 }
-
 
 
 def gen_list_col():
@@ -211,9 +208,6 @@ def make_list():
             make_tab_body(new_wb['List'], 'B%s' % sncp['List']['CurRow'], hyperlink, 'Main_hyperlink')
 
 
-
-
-
 def make_raw_topic():
     make_main_topic(new_wb['Raw'], 'A1', 'Общий свод данных', 'Topic_main')
     sncp['Raw']['CurRow'] = 3
@@ -229,7 +223,6 @@ def out_raw_body():
         for k, v in out_data_raw.items():
             make_tab_body(new_wb['Raw'], gen_cr('Raw'), v['value'], v['b_style'])
             v['value'] = ''
-
         sncp['Raw']['CurRow'] += 1
 
 
@@ -244,14 +237,7 @@ def make_org_topic(list_n, org_name):
     make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Процессор', 'Topic_tab', 15)
     make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Кол-во ядер', 'Topic_tab', 8)
     make_tab_topic(new_wb[list_n], gen_cr(org_name), 'Сокет', 'Topic_tab', 8)
-
-
     sncp[org_name]['CurRow'] = 4
-
-
-
-
-
 
 
 def scan_hwi_htm(src_hwi_path):
@@ -285,7 +271,6 @@ def scan_hwi_htm(src_hwi_path):
         'age': '',
         'style': 'Main_center'
     }
-
     info_cpu = {
         'Number Of Processor Cores:': '',
         'Number Of Logical Processors:': '',
@@ -293,7 +278,8 @@ def scan_hwi_htm(src_hwi_path):
         'CPU Code Name:': '',
         'CPU Technology:': '',
         'CPU Platform:': '',
-        'L3 Cache:': ''
+        'L3 Cache:': '',
+        'Maximum Memory Size per Channel:': ''
     }
     info_mb = {
         "Motherboard Model:": "",
@@ -306,23 +292,19 @@ def scan_hwi_htm(src_hwi_path):
         'Current Memory Clock:': '',
         'Current Timing (tCAS-tRCD-tRP-tRAS):': '',
         'Memory Runs At:': '',
+        'Memory Type:': '',
+        'Module Type:': '',
         'Need upgrade memory': '',
         'Upgrade style': 'Main_center',
         'Total Memory Count': 0
         }
     info_module = {
-        'Module Number:': ['', '', '', ''],
-        'Module Size:': ['', '', '', ''],
-        'Memory Type:': ['', '', '', ''],
+        'Module Density:': ['', '', '', ''],
         'Memory Speed:': ['', '', '', ''],
         'Module Manufacturer:': ['', '', '', ''],
         'Module Part Number:': ['', '', '', '']
     }
-    socket_stat = {
-        '0': {}
 
-
-    }
 
 
     def make_headers_list(tables_n):
@@ -391,28 +373,77 @@ def scan_hwi_htm(src_hwi_path):
 
     def check_module():
         index_module = []
+        index_memdev = []
         module_tmp = {
-            'Module Number:': '',
-            'Module Size:': '',
+            'Module Density:': '',
             'Memory Type:': '',
+            'Module Type:': '',
             'Memory Speed:': '',
             'Module Manufacturer:': '',
             'Module Part Number:': ''
             }
+        memdev_tmp0 = {
+            'Device Size:': '',  # Module Density:
+            'Device Type:': '',  # Memory Type:
+            'Device Form Factor:': '',   # Module Type:
+            'Memory Speed:': '',  # Memory Speed:
+            'Manufacturer:': '',  # Module Manufacturer:
+            'Part Number:': ''  # Module Part Number:
+        }
+
+        def wr_type(im_name, im_value):
+            if im_value != '' and info_memory[im_name] == '':
+                info_memory[im_name] = im_value
+
 
         for t in range(header_list.index('Memory'), len_tables-50):
             if header_list[t].startswith('Row:'):
                 index_module.append(t)
-            if len(index_module) == 0:
-                index_module.append(header_list.index('Memory'))
-        for im in range(len(index_module)):
 
-            scan_value(tables[index_module[im] + 1], module_tmp)
-            for mkey in info_module.keys():
-                print(  module_tmp[mkey])
-                info_module[mkey][im] = module_tmp[mkey]
-                module_tmp[mkey] = ''
-        info_memory['Total Memory Count'] = len(index_module)
+        if len(index_module) != 0:
+            for im in range(len(index_module)):
+                scan_value(tables[index_module[im] + 1], module_tmp)
+                for mkey in info_module.keys():
+                    info_module[mkey][im] = module_tmp[mkey]
+                    module_tmp[mkey] = ''
+                wr_type('Memory Type:', module_tmp['Memory Type:'])
+                wr_type('Module Type:', module_tmp['Module Type:'])
+            info_memory['Total Memory Count'] = len(index_module)
+        else:
+            print('--- ind 0 ------------------')
+            s_start = header_list.index('Memory Devices')
+            for t in range(s_start + 1, s_start + 15):
+                if header_list[t] == 'Memory Device':
+                    index_memdev.append(t)
+            for im in range(len(index_memdev)):
+                memdev_tmp = memdev_tmp0
+                scan_value(tables[index_memdev[im] + 1], memdev_tmp)
+                if memdev_tmp['Device Size:'] != '0 MBytes':
+                    module_tmp['Module Density:'] = memdev_tmp['Device Size:']
+                    module_tmp['Memory Speed:'] = memdev_tmp['Memory Speed:']
+                    module_tmp['Module Manufacturer:'] = memdev_tmp['Manufacturer:']
+                    module_tmp['Module Part Number:'] = memdev_tmp['Part Number:']
+                    wr_type('Memory Type:', memdev_tmp['Device Type:'])
+                    wr_type('Module Type:', memdev_tmp['Device Form Factor:'])
+                    info_memory['Total Memory Count'] += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -434,6 +465,7 @@ def scan_hwi_htm(src_hwi_path):
     index_cpu = header_list.index('Central Processor(s)')
     scan_value(tables[index_cpu + 1], info_cpu)
     scan_value(tables[index_cpu + 3], info_cpu)
+    print('max ram', info_cpu['Maximum Memory Size per Channel:'])
 
     # Motherboard info
     index_mb = header_list.index('Motherboard')
@@ -444,7 +476,7 @@ def scan_hwi_htm(src_hwi_path):
     index_memory = header_list.index('Memory')
     scan_value(tables[index_memory + 1], info_memory)
     check_memory()
-    info_memory['Total Memory Count'] = header_list.count('Memory Device')
+    #info_memory['Total Memory Count'] = header_list.count('Memory Device')
     check_module()
 
 
@@ -482,19 +514,19 @@ def scan_hwi_htm(src_hwi_path):
     out_data_raw['Need upgrade memory']['b_style'] = info_memory['Upgrade style']
 
     out_data_raw['Total Memory Size [MB]:']['value'] = info_memory['Total Memory Size [MB]:']
+    out_data_raw['Maximum Supported Memory Clock:']['value'] = info_memory['Maximum Supported Memory Clock:']
+    out_data_raw['Maximum Memory Size per Channel:']['value'] = info_cpu['Maximum Memory Size per Channel:']
     out_data_raw['Total Memory Count']['value'] = info_memory['Total Memory Count']
 
 
 
 
-
-    for i in range(info_memory['Total Memory Count']):
-        print('----', i, info_module['Module Size:'][i])
-        out_data_raw['Module Size:%i' % i]['value'] = info_module['Module Size:'][i]
-        out_data_raw['Memory Type:%s' % i]['value'] = info_module['Memory Type:'][i]
-        out_data_raw['Memory Speed:%s' % i]['value'] = info_module['Memory Speed:'][i]
-        out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
-        out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
+    #for i in range(info_memory['Total Memory Count']):
+        #print('----', i, info_module['Module Size:'][i])
+        #out_data_raw['Module Size:%i' % i]['value'] = info_module['Module Size:'][i]
+        #out_data_raw['Memory Speed:%s' % i]['value'] = info_module['Memory Speed:'][i]
+        #out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
+        #out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
 
 
 
