@@ -51,18 +51,25 @@ out_data_raw = {
         'name': 'Опер. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Total Memory Size [MB]:': {
         'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory upgrade': {
+        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
     'Maximum Supported Memory Clock:': {
         'name': 'Максимально поддерживаемая скороость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Maximum Memory Size per Channel:': {
         'name': 'Максимум памяти на канал', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory Type:': {
+        'name': 'Тип памяти', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory sale': {
+        'name': 'Наличие памяти в продаже', 'b_style': 'Main_center', 'width': 10, 'value': ''},
 
-    'Need upgrade memory': {
-        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+
+    'Module Type:': {
+        'name': 'Вид модуля', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Total Memory Count': {
         'name': 'Кол-во модулей', 'b_style': 'Main_center', 'width': 10, 'value': ''},
 
 
-    'Module Size:0': {
+    'Module Density:0': {
         'name': 'Модуль 1 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:0': {
         'name': 'Модуль 1 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
@@ -71,7 +78,7 @@ out_data_raw = {
     'Module Part Number:0': {
         'name': 'Модуль 1 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
-    'Module Size:1': {
+    'Module Density:1': {
         'name': 'Модуль 2 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:1': {
         'name': 'Модуль 2 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
@@ -80,7 +87,7 @@ out_data_raw = {
     'Module Part Number:1': {
         'name': 'Модуль 2 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
-    'Module Size:2': {
+    'Module Density:2': {
         'name': 'Модуль 3 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:2': {
         'name': 'Модуль 3 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
@@ -89,19 +96,74 @@ out_data_raw = {
     'Module Part Number:2': {
         'name': 'Модуль 3 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
-    'Module Size:3': {
+    'Module Density:3': {
         'name': 'Модуль 4 объем', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Speed:3': {
         'name': 'Модуль 4 скорость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Module Manufacturer:3': {
         'name': 'Модуль 4 производитель', 'b_style': 'Main_left', 'width': 13, 'value': ''},
     'Module Part Number:3': {
-        'name': 'Модуль 4 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+        'name': 'Модуль 4 PartNumber', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Installed SSD': {
+        'name': 'Установлен SSD', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+    'Drive Controller:0': {
+        'name': 'Привод 1 контроллер', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Model:0': {
+        'name': 'Привод 1 модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Capacity [MB]:0': {
+        'name': 'Привод 1 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Media Rotation Rate:0': {
+        'name': 'Привод 1 скорость вращения', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Nominal Form Factor:0': {
+        'name': 'Привод 1 Form Factor', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Cache Buffer Size:0': {
+        'name': 'Привод 1 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Drive Controller:1': {
+        'name': 'Привод 2 контроллер', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Model:1': {
+        'name': 'Привод 2 модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Capacity [MB]:1': {
+        'name': 'Привод 2 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Media Rotation Rate:1': {
+        'name': 'Привод 2 скорость вращения', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Nominal Form Factor:1': {
+        'name': 'Привод 2 Form Factor', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Cache Buffer Size:1': {
+        'name': 'Привод 2 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Drive Controller:2': {
+        'name': 'Привод 3 контроллер', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Model:2': {
+        'name': 'Привод 3 модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Drive Capacity [MB]:2': {
+        'name': 'Привод 3 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Media Rotation Rate:2': {
+        'name': 'Привод 3 скорость вращения', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Nominal Form Factor:2': {
+        'name': 'Привод 3 Form Factor', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+    'Cache Buffer Size:2': {
+        'name': 'Привод 3 объем буфера', 'b_style': 'Main_left', 'width': 10, 'value': ''}
 
 
     # '': {'name': '', 'b_style': '', 'width': '', 'value': []},
 }
+mem_cost = {
+    '200.0 MHz (PC3200)': {1: 1000},
+    '266.7 MHz (PC2-4200)': {2: 2050},
 
+    '533.3 MHz (DDR3-1066 / PC3-8500)': {4: 1800, 8: 2500},
+    '666.7 MHz (DDR3-1333 / PC3-10600)': {4: 2900, 8: 3600},
+    '800.0 MHz (DDR3-1600 / PC3-12800)': {4: 1500, 8: 3000},
+    '933.3 MHz (DDR3-1866 / PC3-14900)': {4: 2200, 8: 3750},
+
+    '1066.1 MHz (DDR4-2132 / PC4-17000)': {4: 1900, 8: 2050},
+    '1067.2 MHz (DDR4-2134 / PC4-17000)': {4: 1900, 8: 2050},
+    '1200.5 MHz (DDR4-2400 / PC4-19200)': {4: 1400, 8: 5700},
+    '1333.3 MHz (DDR4-2666 / PC4-21300)': {4: 1800, 8: 2500}
+}
 
 def gen_list_col():
     l_col = []
@@ -294,17 +356,37 @@ def scan_hwi_htm(src_hwi_path):
         'Memory Runs At:': '',
         'Memory Type:': '',
         'Module Type:': '',
-        'Need upgrade memory': '',
-        'Upgrade style': 'Main_center',
-        'Total Memory Count': 0
+        'Total Memory Count': 0,
+
+        'Memory upgrade': '',
+        'Memory upgrade style': 'Main_center',
+        'Memory sale': 'Да',
+        'Memory sale style': 'Main_center'
         }
     info_module = {
+        'Module Size:': ['', '', '', ''],
         'Module Density:': ['', '', '', ''],
         'Memory Speed:': ['', '', '', ''],
         'Module Manufacturer:': ['', '', '', ''],
         'Module Part Number:': ['', '', '', '']
     }
-
+    info_drives = {
+        'Drive Controller:': ['', '', '', ''],
+        'Drive Model:': ['', '', '', ''],
+        'Drive Capacity [MB]:': ['', '', '', ''],
+        'Media Rotation Rate:': ['', '', '', ''],
+        'Nominal Form Factor:': ['', '', '', ''],
+        'Cache Buffer Size:': ['', '', '', ''],
+        'TRIM Command:': ['', '', '', '']
+    }
+    info_monitor = {
+        'Monitor Name:': '',
+        'Monitor Name (Manuf):': '',
+        'Serial Number:': '',
+        'Date Of Manufacture:': '',
+        'Max. Vertical Size:': '',
+        'Max. Horizontal Size:': ''
+    }
 
 
     def make_headers_list(tables_n):
@@ -366,15 +448,16 @@ def scan_hwi_htm(src_hwi_path):
     def check_memory():
         info_memory['Total Memory Size [MB]:'] = int(info_memory['Total Memory Size [MB]:'])
         if info_memory['Total Memory Size [MB]:'] < 4096:
-            info_memory['Need upgrade memory'] = 'Да'
-            info_memory['Upgrade style'] = 'Main_center_red'
+            info_memory['Memory upgrade'] = 'Да'
+            info_memory['Memory upgrade style'] = 'Main_center_red'
         else:
-            info_memory['Need upgrade memory'] = 'Нет'
+            info_memory['Memory upgrade'] = 'Нет'
 
     def check_module():
         index_module = []
         index_memdev = []
         module_tmp = {
+            'Module Size:': '',
             'Module Density:': '',
             'Memory Type:': '',
             'Module Type:': '',
@@ -403,6 +486,14 @@ def scan_hwi_htm(src_hwi_path):
         if len(index_module) != 0:
             for im in range(len(index_module)):
                 scan_value(tables[index_module[im] + 1], module_tmp)
+                if module_tmp['Module Density:'] == '':
+                    ms = module_tmp['Module Size:'].split(' ')
+                    if ms[1] == 'GBytes':
+                        module_tmp['Module Density:'] = int(ms[0]) * 1024
+                    else:
+                        module_tmp['Module Density:'] = int(ms[0])
+                else:
+                    module_tmp['Module Density:'] = module_tmp['Module Density:'].split(' ')[0]
                 for mkey in info_module.keys():
                     info_module[mkey][im] = module_tmp[mkey]
                     module_tmp[mkey] = ''
@@ -416,30 +507,57 @@ def scan_hwi_htm(src_hwi_path):
                 if header_list[t] == 'Memory Device':
                     index_memdev.append(t)
             for im in range(len(index_memdev)):
-                memdev_tmp = memdev_tmp0
+                memdev_tmp = dict(memdev_tmp0)
                 scan_value(tables[index_memdev[im] + 1], memdev_tmp)
                 if memdev_tmp['Device Size:'] != '0 MBytes':
-                    module_tmp['Module Density:'] = memdev_tmp['Device Size:']
-                    module_tmp['Memory Speed:'] = memdev_tmp['Memory Speed:']
-                    module_tmp['Module Manufacturer:'] = memdev_tmp['Manufacturer:']
-                    module_tmp['Module Part Number:'] = memdev_tmp['Part Number:']
+                    info_module['Module Density:'][im] = memdev_tmp['Device Size:']
+                    info_module['Memory Speed:'][im] = memdev_tmp['Memory Speed:']
+                    info_module['Module Manufacturer:'][im] = memdev_tmp['Manufacturer:']
+                    info_module['Module Part Number:'][im] = memdev_tmp['Part Number:']
                     wr_type('Memory Type:', memdev_tmp['Device Type:'])
                     wr_type('Module Type:', memdev_tmp['Device Form Factor:'])
                     info_memory['Total Memory Count'] += 1
+        if info_memory['Memory Type:'].startswith('DDR2'):
+            info_memory['Memory sale'] = 'Нет'
+            info_memory['Memory sale style'] = 'Main_center_red'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def check_drive():
+        drives_tmp0 = {
+            'Drive Controller:': '',
+            'Drive Model:': '',
+            'Drive Capacity:': '',
+            'Drive Capacity [MB]:': '',
+            'Media Rotation Rate:': '',
+            'Cache Buffer Size:': '',
+            'TRIM Command:': '',
+            'Nominal Form Factor:': '',
+            'Drive Type:': '',
+            'Device Type:': ''
+        }
+        i_drive = 0
+        i_ssd = 'Нет'
+        start = header_list.index('Drives')
+        stop = 0
+        index_drives = []
+        stop = header_list.index('Audio')
+        if stop == 0:
+            stop = header_list.index('Network')
+        for id in range(start + 1, stop):
+            index_drives.append(id)
+        dvd = ['DVD+R DL', 'BD-ROM']
+        for dev in index_drives:
+            drives_tmp = dict(drives_tmp0)
+            scan_value(tables[dev], drives_tmp)
+            if drives_tmp['Drive Model:'] != '' \
+                    and drives_tmp['Drive Type:'] not in dvd \
+                    and drives_tmp['Device Type:'] not in dvd:
+                if drives_tmp['Media Rotation Rate:'] == 'SSD Drive (Non-rotating)':
+                    i_ssd = 'Да'
+                for mkey in info_drives.keys():
+                    info_drives[mkey][i_drive] = drives_tmp[mkey]
+                i_drive += 1
+            drives_tmp = {}
+        return i_ssd, i_drive
 
 
 
@@ -465,19 +583,21 @@ def scan_hwi_htm(src_hwi_path):
     index_cpu = header_list.index('Central Processor(s)')
     scan_value(tables[index_cpu + 1], info_cpu)
     scan_value(tables[index_cpu + 3], info_cpu)
-    print('max ram', info_cpu['Maximum Memory Size per Channel:'])
 
     # Motherboard info
     index_mb = header_list.index('Motherboard')
     scan_value(tables[index_mb + 1], info_mb)
     check_date(info_mb["BIOS Date:"])
 
-    # Scan Memory Device
+    # Memory Device
     index_memory = header_list.index('Memory')
     scan_value(tables[index_memory + 1], info_memory)
     check_memory()
-    #info_memory['Total Memory Count'] = header_list.count('Memory Device')
     check_module()
+
+    # Drive info
+    info_ssd, drives_count = check_drive()
+
 
 
 
@@ -510,31 +630,33 @@ def scan_hwi_htm(src_hwi_path):
     out_data_raw['Data']['b_style'] = info_date['style']
 
     out_data_raw['Total Memory Size:']['value'] = info_memory['Total Memory Size:']
-    out_data_raw['Need upgrade memory']['value'] = info_memory['Need upgrade memory']
-    out_data_raw['Need upgrade memory']['b_style'] = info_memory['Upgrade style']
-
     out_data_raw['Total Memory Size [MB]:']['value'] = info_memory['Total Memory Size [MB]:']
+    out_data_raw['Memory upgrade']['value'] = info_memory['Memory upgrade']
+    out_data_raw['Memory upgrade']['b_style'] = info_memory['Memory upgrade style']
+
     out_data_raw['Maximum Supported Memory Clock:']['value'] = info_memory['Maximum Supported Memory Clock:']
     out_data_raw['Maximum Memory Size per Channel:']['value'] = info_cpu['Maximum Memory Size per Channel:']
+    out_data_raw['Memory Type:']['value'] = info_memory['Memory Type:']
+    out_data_raw['Module Type:']['value'] = info_memory['Module Type:']
+    out_data_raw['Memory sale']['value'] = info_memory['Memory sale']
+    out_data_raw['Memory sale']['b_style'] = info_memory['Memory sale style']
+
     out_data_raw['Total Memory Count']['value'] = info_memory['Total Memory Count']
+    for i in range(info_memory['Total Memory Count']):
+        out_data_raw['Module Density:%i' % i]['value'] = info_module['Module Density:'][i]
+        out_data_raw['Memory Speed:%s' % i]['value'] = info_module['Memory Speed:'][i]
+        out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
+        out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
 
+    out_data_raw['Installed SSD']['value'] = info_ssd
+    for i in range(drives_count):
+        out_data_raw['Drive Model:%i' % i]['value'] = info_drives['Drive Model:'][i]
+        out_data_raw['Drive Controller:%i' % i]['value'] = info_drives['Drive Controller:'][i]
+        out_data_raw['Drive Capacity [MB]:%i' % i]['value'] = info_drives['Drive Capacity [MB]:'][i]
+        out_data_raw['Media Rotation Rate:%i' % i]['value'] = info_drives['Media Rotation Rate:'][i]
+        out_data_raw['Nominal Form Factor:%i' % i]['value'] = info_drives['Nominal Form Factor:'][i]
+        out_data_raw['Cache Buffer Size:%i' % i]['value'] = info_drives['Cache Buffer Size:'][i]
 
-
-
-    #for i in range(info_memory['Total Memory Count']):
-        #print('----', i, info_module['Module Size:'][i])
-        #out_data_raw['Module Size:%i' % i]['value'] = info_module['Module Size:'][i]
-        #out_data_raw['Memory Speed:%s' % i]['value'] = info_module['Memory Speed:'][i]
-        #out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
-        #out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
-
-
-
-
-
-
-    #out_data_raw['']['value'] = ''
-    #print(round(1.5))
 
 
 
