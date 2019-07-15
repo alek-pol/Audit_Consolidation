@@ -16,22 +16,81 @@ sncp = {
     'List': {'SheetName': 'List', 'CurRow': 0, 'CurCol': 0},
     'Consolidation': {'SheetName': 'Consolidation', 'CurRow': 0, 'CurCol': 0}
 }
+all_recom = {'Отсутствует': 0, 'Модернизировать': 0, 'Списать': 0}
+all_info_cpu = {0: 0, 1: 0, 2: 0}
+all_info_mem = {0: 0, 1: 0, 2: 0}
+all_recom_mem = {'Да': 0, 'Нет': 0}
+all_recom_ssd = {'Да': 0, 'Нет': 0}
+all_arm = []
+
+
 sncp_lock = list(sncp.keys())
 list_col = []
 
+out_data_cons = {
+    'Organithation': {
+        'name': 'Наименование организации', 'b_style': 'Main_left', 'width': 40, 'value': ''},
+    'Workplace': {
+        'name': 'Рабочих мест обследовано', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Workplace tech inspect': {
+        'name': 'Собрано тех. информации', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Workplace tech processed': {
+        'name': 'Обработаноо тех. информации', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Recommended utilize': {
+        'name': 'Рекомендовано списать', 'b_style': 'Main_center', 'width': 13, 'value': ''},
+    'Recommended upgrade': {
+        'name': 'Рекомендовано модернизировать', 'b_style': 'Main_center', 'width': 13, 'value': ''},
+    'Recommended absent': {
+        'name': 'Рекомендации отсутствуют, высокое кач. оснащения', 'b_style': 'Main_center', 'width': 14, 'value': ''},
+
+    'Memory upgrade': {
+        'name': 'Рекомендовано увеличить память', 'b_style': 'Main_center', 'width': 13, 'value': ''},
+    'Install ssd': {
+        'name': 'Рекомендовано установить SSD-диск', 'b_style': 'Main_center', 'width': 13, 'value': ''},
+
+    'Type cpu 1': {
+        'name': 'Процессор 1-ядерный', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Type cpu 2': {
+        'name': 'Процессор 2х-ядерный', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Type cpu 3': {
+        'name': 'Процессор 4х-ядерный и более', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+
+    'Type mem 1': {
+        'name': 'Память 0,5 Гб - 3,5 Гб', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Type mem 2': {
+        'name': 'Память 4 Гб - 6 Гб', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Type mem 3': {
+        'name': 'Память 8 Гб - 32 Гб', 'b_style': 'Main_center', 'width': 10, 'value': ''}
+
+
+}
+
 out_data_raw = {
     'Organithation': {
-        'name': 'Наименование организации', 'b_style': 'Main_left', 'width': 30, 'value': ''},
+        'name': 'Наименование организации', 'b_style': 'Main_left', 'width': 35, 'value': ''},
     'Workplace': {
-        'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 16, 'value': ''},
+        'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 20, 'value': ''},
     'Computer Name:': {
         'name': 'Название АРМ', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Tech raitig': {
+        'name': 'Техический рейтинг оснащенности', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+    'Performance evaluation': {
+        'name': 'Общая оценка производительности', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+    'Memory upgrade': {
+        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+    'SSD need install': {
+        'name': 'Необходимо установить SSD дсик', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+    'Data': {
+        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Recommendation': {
+        'name': 'Рекомендация', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
     'Case Type:': {
         'name': 'Тип корпуса', 'b_style': 'Main_left', 'width': 10, 'value': ''},
-    'Status': {
-        'name': 'Статус', 'b_style': 'Main_left', 'width': 10, 'value': ''},
-    'Operating System:': {
-        'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''},
+
+
+
     'OS need update': {
         'name': 'Необходимо обновить ОС', 'b_style': 'Main_center', 'width': 11, 'value': ''},
     'Number Of Processor Cores:': {
@@ -46,14 +105,12 @@ out_data_raw = {
         'name': 'L3 - Кэш', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Motherboard Model:': {
         'name': 'Модель мат.платы', 'b_style': 'Main_center', 'width': 15, 'value': ''},
-    'Data': {
-        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 7, 'value': ''},
+
     'Total Memory Size:': {
         'name': 'Опер. памяти всего', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Total Memory Size [MB]:': {
         'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory upgrade': {
-        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+
     'Maximum Supported Memory Clock:': {
         'name': 'Максимально поддерживаемая скороость', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Maximum Memory Size per Channel:': {
@@ -151,78 +208,78 @@ out_data_raw = {
     'Diagonal': {
         'name': 'Диагональ монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Monitor Name:': {
-            'name': 'Модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Модель монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Monitor Name (Manuf):': {
-            'name': 'Модельный ряд', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Модельный ряд монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Serial Number:': {
-            'name': 'Серийный номер', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Серийный номер монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Date Of Manufacture:': {
-            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Дата производства монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Max. Vertical Size:': {
-            'name': 'Высота', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Высота экрана монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Max. Horizontal Size:': {
-            'name': 'Ширина', 'b_style': 'Main_left', 'width': 10, 'value': ''}
+            'name': 'Ширина экрана монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Operating System:': {
+        'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''}
 }
 
 
 out_data_org = {
     'Workplace': {
         'name': 'Рабочее место', 'b_style': 'Main_left', 'width': 15, 'value': ''},
-    'Status': {
-        'name': 'Статус', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+    'Tech raitig': {
+        'name': 'Техический рейтинг оснащенности', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Performance evaluation': {
+        'name': 'Общая оценка производительности', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Memory upgrade': {
+        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'SSD need install': {
+        'name': 'Необходимо установить SSD дсик', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Data': {
+        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 10, 'value': ''},
+    'Recommendation': {
+        'name': 'Рекомендация', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+
+
     'CPU Brand Name:': {
         'name': 'Процессор', 'b_style': 'Main_center', 'width': 15, 'value': ''},
     'Number Of Processor Cores:': {
         'name': 'Кол-во ядер', 'b_style': 'Main_center', 'width': 5, 'value': ''},
 
 
-    'CPU Platform:': {
-        'name': 'Сокет', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'L3 Cache:': {
-        'name': 'L3 - Кэш', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-
-    'Data': {
-        'name': 'Год произв-ва', 'b_style': 'Main_center', 'width': 7, 'value': ''},
     'Total Memory Size [MB]:': {
         'name': 'Опер. памяти всего (Mb)', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-    'Memory upgrade': {
-        'name': 'Необходимо увеличить память', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Memory Type:': {
         'name': 'Тип памяти', 'b_style': 'Main_center', 'width': 10, 'value': ''},
 
-
-    'Module Type:': {
-        'name': 'Вид модуля', 'b_style': 'Main_center', 'width': 10, 'value': ''},
-
-
-    'Installed SSD': {
-        'name': 'Установлен SSD', 'b_style': 'Main_center', 'width': 10, 'value': ''},
     'Drive Capacity [MB]:0': {
-        'name': 'Привод 1 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+        'name': 'Объем жесткого диска 1', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Drive Capacity [MB]:1': {
-        'name': 'Привод 2 объем', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+        'name': 'Объем жесткого диска 2', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
 
     'Diagonal': {
-        'name': 'Диагональ монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+        'name': 'Диагональ монитора', 'b_style': 'Main_center', 'width': 8, 'value': ''},
     'Monitor Name:': {
-            'name': 'Модель', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Модель монитора', 'b_style': 'Main_left', 'width': 10, 'value': ''},
     'Date Of Manufacture:': {
-            'name': 'Дата производства', 'b_style': 'Main_left', 'width': 10, 'value': ''},
-
-    'Case Type:': {
-        'name': 'Тип корпуса', 'b_style': 'Main_left', 'width': 10, 'value': ''},
+            'name': 'Дата производства монитора', 'b_style': 'Main_center', 'width': 8, 'value': ''},
 
 
-    'Operating System:': {
-        'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''},
     'OS need update': {
-        'name': 'Необходимо обновить ОС', 'b_style': 'Main_center', 'width': 11, 'value': ''},
+        'name': 'Необходимо обновить опер. систему', 'b_style': 'Main_center', 'width': 10, 'value': ''},
 
 
 }
 
+#  'Case Type:': {
+#     'name': 'Тип корпуса', 'b_style': 'Main_left', 'width': 10, 'value': ''},
 
+
+# 'Operating System:': {
+#    'name': 'Операционная система', 'b_style': 'Main_left', 'width': 20, 'value': ''},
 
 mem_cost = {
     '200.0 MHz (PC3200)': {1: 1000},
@@ -343,9 +400,17 @@ def make_list():
             hyperlink ='=HYPERLINK("#%s!A1", "%s")' % (sncp[key]['SheetName'], key)
             make_tab_body(new_wb['List'], 'B%s' % sncp['List']['CurRow'], hyperlink, 'Main_hyperlink')
 
+def make_cons_topic():
+    make_main_topic(new_wb['Consolidation'], 'A1', 'Общий свод данных', 'Topic_main')
+    sncp['Consolidation']['CurRow'] = 3
+    sncp['Consolidation']['CurCol'] = 0
+    for k, v in out_data_cons.items():
+        make_tab_topic(new_wb['Consolidation'], gen_cr('Consolidation'), v['name'], 'Topic_tab', v['width'])
+    sncp['Consolidation']['CurRow'] += 1
+
 
 def make_raw_topic():
-    make_main_topic(new_wb['Raw'], 'A1', 'Общий свод данных', 'Topic_main')
+    make_main_topic(new_wb['Raw'], 'A1', 'Полная выгрузка', 'Topic_main')
     sncp['Raw']['CurRow'] = 3
     sncp['Raw']['CurCol'] = 0
     for k, v in out_data_raw.items():
@@ -361,6 +426,12 @@ def out_raw_body():
             v['value'] = ''
         sncp['Raw']['CurRow'] += 1
 
+def out_cons_body():
+    sncp['Consolidation']['CurCol'] = 0
+    for k, v in out_data_cons.items():
+        make_tab_body(new_wb['Consolidation'], gen_cr('Consolidation'), v['value'], v['b_style'])
+        v['value'] = ''
+    sncp['Consolidation']['CurRow'] += 1
 
 def out_org_body(list_n, org_name):
     sncp[org_name]['CurCol'] = 0
@@ -437,8 +508,9 @@ def scan_hwi_htm(src_hwi_path):
 
         'Memory upgrade': '',
         'Memory upgrade style': 'Main_center',
-        'Memory sale': 'Да',
-        'Memory sale style': 'Main_center'
+        'Memory sale': '',
+        'Memory sale style': 'Main_center',
+        'Memory mhz': 0
         }
     info_module = {
         'Module Size:': ['', '', '', ''],
@@ -466,6 +538,11 @@ def scan_hwi_htm(src_hwi_path):
         'Diagonal': ''
     }
 
+    info_ssd = {
+        'SSD Install': 'Нет',
+        'SSD need install': 'Да',
+        'SSD install style': 'Main_center_red'
+        }
 
     def make_headers_list(tables_n):
         headers = []
@@ -596,9 +673,22 @@ def scan_hwi_htm(src_hwi_path):
                     wr_type('Memory Type:', memdev_tmp['Device Type:'])
                     wr_type('Module Type:', memdev_tmp['Device Form Factor:'])
                     info_memory['Total Memory Count'] += 1
-        if info_memory['Memory Type:'].startswith('DDR2'):
-            info_memory['Memory sale'] = 'Нет'
-            info_memory['Memory sale style'] = 'Main_center_red'
+
+
+        mem_speed = info_module['Memory Speed:'][0]
+
+        if mem_speed != '':
+            mhz_t = mem_speed.split('.')
+            if len(mhz_t) > 0:
+                try:
+                    info_memory['Memory mhz'] = int(mhz_t[0])
+                except:
+                    print('MHz None')
+        #if info_memory['Memory mhz'] < 800:
+          #  info_memory['Memory sale'] = 'Нет'
+         #   info_memory['Memory sale style'] = 'Main_center_red'
+
+
 
     def check_drive():
         drives_tmp0 = {
@@ -631,12 +721,17 @@ def scan_hwi_htm(src_hwi_path):
                     and drives_tmp['Drive Type:'] not in dvd \
                     and drives_tmp['Device Type:'] not in dvd:
                 if drives_tmp['Media Rotation Rate:'] == 'SSD Drive (Non-rotating)':
-                    i_ssd = 'Да'
+                    info_ssd['SSD Install'] = 'Да'
+                    info_ssd['SSD need install'] = 'Нет'
+                    info_ssd['SSD install style'] = 'Main_center_green'
+
+
                 for mkey in info_drives.keys():
                     info_drives[mkey][i_drive] = drives_tmp[mkey]
                 i_drive += 1
             drives_tmp = {}
-        return i_ssd, i_drive
+
+        return i_drive
 
     def check_monitor():
         scan_value(tables[header_list.index('Monitor') + 3], info_monitor)
@@ -656,7 +751,6 @@ def scan_hwi_htm(src_hwi_path):
 
 
 
-
     # ====================
     header_list = make_headers_list(tables)
     print(workplace)
@@ -668,7 +762,7 @@ def scan_hwi_htm(src_hwi_path):
         index_base = header_list.index('System Enclosure')
         scan_value(tables[index_base + 1], info_base)
     except:
-        print()
+        print('not found - System Enclosure')
 
     # Operating System info
     check_os(info_os["Operating System:"].split(' '))
@@ -690,19 +784,108 @@ def scan_hwi_htm(src_hwi_path):
     check_module()
 
     # Drive info
-    info_ssd, drives_count = check_drive()
+
+    drives_count = check_drive()
+
 
     # Monitor info
     check_monitor()
     #
 
+    cpu = int(info_cpu['Number Of Processor Cores:'])
+    mem = int(info_memory['Total Memory Size [MB]:'])
+    rank_cpu = {1: 0, 2: 1, 3: 1, 4: 2, 6: 2, 8: 2}
+    rank_mem = {
+        512:  0,
+        1024: 0,
+        1536: 0,
+        2048: 0,
+        2560: 0,
+        3072: 0,
+        3584: 0,
+        4096: 1,
+        6144: 1,
+        8192: 2,
+        16384: 2,
+        24576: 2,
+        32768: 2
+    }
+    rank_ssd = {'Нет': 0, 'Да': 2}
+
+    print(cpu)
+
+    r_cpu = rank_cpu[cpu]
+    r_mem = rank_mem[mem]
+    r_ssd = rank_ssd[info_ssd['SSD Install']]
+
+    raiting = r_cpu + r_mem + r_ssd
+
+
+    raiting_comb = {
+        0: 'Низкая',
+        1: 'Низкая',
+        2: 'Минимальная',
+        3: 'Минимальная',
+        4: 'Средняя',
+        5: 'Высокая',
+        6: 'Высокая',
+        7: 'Высокая'
+    }
+    recommendation = '--'
+    print(info_date['age'], raiting_comb[raiting] )
+    #check_rec()
+
+    if info_date['age'] == 'old':
+        if raiting_comb[raiting] in ['Низкая', 'Минимальная']:
+            recommendation = 'Списать'
+        elif raiting_comb[raiting] in ['Средняя']:
+            recommendation = 'Модернизировать'
+        else:
+            recommendation = 'Отсутствует'
+    elif info_date['age'] == 'middle':
+        if raiting_comb[raiting] in ['Низкая', 'Минимальная', 'Средняя']:
+            recommendation = 'Модернизировать'
+        else:
+            recommendation = 'Отсутствует'
+    else:
+        if raiting_comb[raiting] in ['Низкая', 'Минимальная', 'Средняя']:
+            recommendation = 'Модернизировать'
+        else:
+            recommendation = 'Отсутствует'
+
+    all_recom[recommendation] += 1
+    cur_recom[recommendation] += 1
+
+    all_info_mem[rank_mem[mem]] += 1
+    cur_info_mem[rank_mem[mem]] += 1
+    all_info_cpu[rank_cpu[cpu]] += 1
+    cur_info_cpu[rank_cpu[cpu]] += 1
+
+
+    all_recom_mem[info_memory['Memory upgrade']] += 1
+    cur_recom_mem[info_memory['Memory upgrade']] += 1
+
+    all_recom_ssd[info_ssd['SSD need install']] += 1
+    cur_recom_ssd[info_ssd['SSD need install']] += 1
+
+    all_arm.append(workplace)
+    cur_arm.append(workplace)
+
+    print(len(all_arm))
+    print(len(cur_arm))
+    print(' all', all_recom)
+    print(' cur', cur_recom)
+    print('all mem', all_info_mem)
+    print('cur mem', cur_info_mem)
+    print('all rec mem', all_recom_mem)
+    print('cur rec mem', cur_recom_mem)
+    print('all rec ssd', all_recom_ssd)
+    print('cur rec ssd', cur_recom_ssd)
 
 
 
-    #if date_status == 1:
-    status_t = ['На списание', 'Минимальные', 'Средние', 'Высокие']
-    #else:
-     #   status = ['', '']
+
+
 
 
 
@@ -711,7 +894,10 @@ def scan_hwi_htm(src_hwi_path):
     out_data_raw['Workplace']['value'] = workplace
     out_data_raw['Computer Name:']['value'] = info_base['Computer Name:']
     out_data_raw['Case Type:']['value'] = info_base['Case Type:']
-    #out_data_raw['Status']['value'] = status[0]
+
+    out_data_raw['Performance evaluation']['value'] = raiting_comb[raiting]
+    out_data_raw['Tech raitig']['value'] = raiting
+    out_data_raw['Recommendation']['value'] = recommendation
 
     out_data_raw['Operating System:']['value'] = info_os['Operating System:']
     out_data_raw['OS need update']['value'] = info_os['OS need update']
@@ -746,7 +932,11 @@ def scan_hwi_htm(src_hwi_path):
         out_data_raw['Module Manufacturer:%s' % i]['value'] = info_module['Module Manufacturer:'][i]
         out_data_raw['Module Part Number:%s' % i]['value'] = info_module['Module Part Number:'][i]
 
-    out_data_raw['Installed SSD']['value'] = info_ssd
+    out_data_raw['Installed SSD']['value'] = info_ssd['SSD Install']
+    out_data_raw['SSD need install']['value'] = info_ssd['SSD need install']
+    out_data_raw['SSD need install']['b_style'] = info_ssd['SSD install style']
+
+
     for i in range(drives_count):
         if i == 3:
             break
@@ -766,27 +956,34 @@ def scan_hwi_htm(src_hwi_path):
     out_data_raw['Diagonal']['value'] = info_monitor['Diagonal']
 
     out_raw_body()
+
+
     # entry Org list
     out_data_org['Workplace']['value'] = workplace
-    out_data_org['Status']['value'] = ''
+
+    out_data_org['Performance evaluation']['value'] = raiting_comb[raiting]
+    out_data_org['Tech raitig']['value'] = raiting
+    out_data_org['Recommendation']['value'] = recommendation
+    out_data_org['SSD need install']['value'] = info_ssd['SSD need install']
+
     out_data_org['Number Of Processor Cores:']['value'] = info_cpu['Number Of Processor Cores:']
     out_data_org['CPU Brand Name:']['value'] = info_cpu['CPU Brand Name:']
-    out_data_org['CPU Platform:']['value'] = info_cpu['CPU Platform:']
+    #out_data_org['CPU Platform:']['value'] = info_cpu['CPU Platform:']
     out_data_org['Data']['value'] = info_date['value']
     out_data_org['Total Memory Size [MB]:']['value'] = info_memory['Total Memory Size [MB]:']
     out_data_org['Memory upgrade']['value'] = info_memory['Memory upgrade']
 
     out_data_org['Memory Type:']['value'] = info_memory['Memory Type:']
-    out_data_org['Module Type:']['value'] =  info_memory['Module Type:']
-    out_data_org['Installed SSD']['value'] = info_ssd
+    #out_data_org['Module Type:']['value'] =  info_memory['Module Type:']
+    #out_data_org['Installed SSD']['value'] = info_ssd['SSD Install']
     out_data_org['Drive Capacity [MB]:0']['value'] = info_drives['Drive Capacity [MB]:'][0]
     out_data_org['Drive Capacity [MB]:1']['value'] = info_drives['Drive Capacity [MB]:'][1]
     out_data_org['Diagonal']['value'] = info_monitor['Diagonal']
     out_data_org['Monitor Name:']['value'] = info_monitor['Monitor Name:']
     out_data_org['Date Of Manufacture:']['value'] = info_monitor['Date Of Manufacture:']
-    out_data_org['Operating System:']['value'] = info_os['Operating System:']
+    #out_data_org['Operating System:']['value'] = info_os['Operating System:']
     out_data_org['OS need update']['value'] = info_os['OS need update']
-    out_data_org['Case Type:']['value'] = info_base['Case Type:']
+    #out_data_org['Case Type:']['value'] = info_base['Case Type:']
 
     out_org_body(sncp[org]['SheetName'], org)
 
@@ -820,25 +1017,57 @@ if __name__ == '__main__':
     #print(sncp)
     make_list()  # Список листов с гиперссылкой
     make_raw_topic()
+    make_cons_topic()
 
     for i in range(len(org_path)):
         print('----------------------------------------------------------------------------')
         print(org_path[i])
         workplaces = glob.glob(org_path[i]+'\*')
+        #print(workplaces)
         hwi_htm_files = glob.glob(org_path[i]+'\*\*.htm*')
 
         org_name = org_path[i].split('\\')[-1]
+        cur_recom = {'Отсутствует': 0, 'Модернизировать': 0, 'Списать': 0}
+        cur_info_cpu = {0: 0, 1: 0, 2: 0}
+        cur_info_mem = {0: 0, 1: 0, 2: 0}
+        cur_recom_mem = {'Да': 0, 'Нет': 0}
+        cur_recom_ssd = {'Да': 0, 'Нет': 0}
+        cur_arm = []
         j = 0
         for src_tmp_path in hwi_htm_files:
-
-            print(org_name)
             scan_hwi_htm(src_tmp_path)
             j += 1
-            if j > 7:
-                break
+#            if j > 5:
+ #               break
+
+
+        hyperlink = '=HYPERLINK("#%s!A1", "%s")' % (sncp[org_name]['SheetName'], org_name)
+
+        out_data_cons['Organithation']['value'] = hyperlink
+        out_data_cons['Workplace']['value'] = len(workplaces)
+        out_data_cons['Workplace tech inspect']['value'] = len(hwi_htm_files)
+        out_data_cons['Workplace tech processed']['value'] = len(cur_arm)
+        out_data_cons['Recommended utilize']['value'] = cur_recom['Списать']
+        out_data_cons['Recommended upgrade']['value'] = cur_recom['Модернизировать']
+        out_data_cons['Recommended absent']['value'] = cur_recom['Отсутствует']
+        out_data_cons['Memory upgrade']['value'] = cur_recom_mem['Да']
+        out_data_cons['Install ssd']['value'] = cur_recom_ssd['Да']
+
+        out_data_cons['Type cpu 1']['value'] = cur_info_cpu[0]
+        out_data_cons['Type cpu 2']['value'] = cur_info_cpu[1]
+        out_data_cons['Type cpu 3']['value'] = cur_info_cpu[2]
+
+        out_data_cons['Type mem 1']['value'] = cur_info_mem[0]
+        out_data_cons['Type mem 2']['value'] = cur_info_mem[1]
+        out_data_cons['Type mem 3']['value'] = cur_info_mem[2]
+
+
+        out_cons_body()
+
+
         new_wb.save(dst_path + dst_file)
-        if i > 5:
-            break
+#        if i > 15:
+#            break
 
 
 
